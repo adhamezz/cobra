@@ -24,11 +24,11 @@ export default function HeroParticles() {
       background: {
         color: "transparent",
       },
-      fpsLimit: 120,
+      fpsLimit: 60,
       detectRetina: true,
       particles: {
         number: {
-          value: 80,
+          value: 42,
           density: {
             enable: true,
             width: 800,
@@ -49,7 +49,7 @@ export default function HeroParticles() {
         },
         move: {
           enable: true,
-          speed: 1.8,
+          speed: 1.2,
           direction: "top",
           outModes: {
             default: "out",

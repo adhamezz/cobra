@@ -210,11 +210,7 @@ export function ServiceRequestModal({
       process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ||
       process.env.VITE_EMAILJS_PUBLIC_KEY;
     const receiverEmail = process.env.NEXT_PUBLIC_CONTACT_RECEIVER_EMAIL?.trim();
-
-    if (!serviceId || !templateId || !publicKey) {
-      setErrorMessage(copy.configError);
-      return;
-    }
+    const canUseEmailJs = Boolean(serviceId && templateId && publicKey);
 
     setIsSubmitting(true);
     setErrorMessage(null);
@@ -243,10 +239,34 @@ export function ServiceRequestModal({
         });
       }
 
-      const result = await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      if (canUseEmailJs) {
+        const result = await emailjs.send(
+          serviceId as string,
+          templateId as string,
+          templateParams,
+          publicKey as string,
+        );
 
-      if (result.status !== 200) {
-        throw new Error("EmailJS send did not return success status");
+        if (result.status !== 200) {
+          throw new Error("EmailJS send did not return success status");
+        }
+      } else {
+        const response = await fetch("/api/service-request", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fullName: formState.fullName.trim(),
+            email: formState.email.trim(),
+            phone: formState.phone.trim(),
+            projectType: formState.projectType,
+            message: formState.message.trim(),
+            locale,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Fallback request send failed");
+        }
       }
 
       setFormState(initialFormState);

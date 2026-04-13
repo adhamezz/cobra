@@ -1,24 +1,38 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { About } from "@/components/About";
-import { BackToTopButton } from "@/components/BackToTopButton";
-import { Footer } from "@/components/Footer";
-import { FloatingServiceRequestButton } from "@/components/FloatingServiceRequestButton";
 import { Hero } from "@/components/Hero";
-import { JoinUsBenefitsSection } from "@/components/JoinUsBenefitsSection";
 import { Navbar } from "@/components/Navbar";
-import { Projects } from "@/components/Projects";
-import { Services } from "@/components/Services";
-import { ServiceRequestModal } from "@/components/ServiceRequestModal";
 import { SiteLoader } from "@/components/SiteLoader";
-import { WhatYouGetSection } from "@/components/WhatYouGetSection";
-import { WhyChooseUs } from "@/components/WhyChooseUs";
-import { WorkProcessSection } from "@/components/WorkProcessSection";
 import { contentByLocale } from "@/data/siteContent";
 import type { Locale } from "@/types";
+
+const JoinUsBenefitsSection = dynamic(
+  () => import("@/components/JoinUsBenefitsSection").then((mod) => mod.JoinUsBenefitsSection),
+);
+const Services = dynamic(() => import("@/components/Services").then((mod) => mod.Services));
+const WhatYouGetSection = dynamic(
+  () => import("@/components/WhatYouGetSection").then((mod) => mod.WhatYouGetSection),
+);
+const WorkProcessSection = dynamic(
+  () => import("@/components/WorkProcessSection").then((mod) => mod.WorkProcessSection),
+);
+const Projects = dynamic(() => import("@/components/Projects").then((mod) => mod.Projects));
+const About = dynamic(() => import("@/components/About").then((mod) => mod.About));
+const WhyChooseUs = dynamic(() => import("@/components/WhyChooseUs").then((mod) => mod.WhyChooseUs));
+const Footer = dynamic(() => import("@/components/Footer").then((mod) => mod.Footer));
+const FloatingServiceRequestButton = dynamic(
+  () => import("@/components/FloatingServiceRequestButton").then((mod) => mod.FloatingServiceRequestButton),
+);
+const ServiceRequestModal = dynamic(
+  () => import("@/components/ServiceRequestModal").then((mod) => mod.ServiceRequestModal),
+);
+const BackToTopButton = dynamic(
+  () => import("@/components/BackToTopButton").then((mod) => mod.BackToTopButton),
+);
 
 export default function Home() {
   const router = useRouter();
