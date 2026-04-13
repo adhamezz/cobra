@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 import type { Locale } from "@/types";
 import type { LanguageContent } from "@/data/siteContent";
@@ -13,8 +13,13 @@ type FloatingWhatsAppButtonProps = {
 };
 
 export function FloatingWhatsAppButton({ locale, content }: FloatingWhatsAppButtonProps) {
-  const searchParams = useSearchParams();
-  const resolvedLocale: Locale = locale ?? (searchParams?.get("lang") === "en" ? "en" : "ar");
+  const [urlLocale] = useState<Locale>(() => {
+    if (typeof window === "undefined") return "ar";
+    const params = new URLSearchParams(window.location.search);
+    return params.get("lang") === "en" ? "en" : "ar";
+  });
+
+  const resolvedLocale: Locale = locale ?? urlLocale;
   const resolvedContent = content ?? contentByLocale[resolvedLocale].whatsapp;
   const isArabic = resolvedLocale === "ar";
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 
 import type { Locale } from "@/types";
 
@@ -10,13 +9,13 @@ function resolveLocale(value: string | null): Locale {
 }
 
 export function DocumentLocale() {
-  const searchParams = useSearchParams();
-  const locale = resolveLocale(searchParams?.get("lang") ?? null);
-
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const locale = resolveLocale(params.get("lang"));
+
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
-  }, [locale]);
+  }, []);
 
   return null;
 }
