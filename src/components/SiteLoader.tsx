@@ -12,23 +12,11 @@ export function SiteLoader() {
   const prefersReducedMotion = useReducedMotion() ?? false;
 
   useEffect(() => {
-    // نعرض اللودر حتى يكتمل تحميل الصفحة أو بعد مهلة قصيرة كحد أقصى.
-    const fallbackTimer = window.setTimeout(() => setIsReady(true), 1400);
-
-    const handleLoad = () => {
-      window.clearTimeout(fallbackTimer);
-      window.setTimeout(() => setIsReady(true), 250);
-    };
-
-    if (document.readyState === "complete") {
-      handleLoad();
-    } else {
-      window.addEventListener("load", handleLoad);
-    }
+    // Keep loader duration short and deterministic in production.
+    const fallbackTimer = window.setTimeout(() => setIsReady(true), 550);
 
     return () => {
       window.clearTimeout(fallbackTimer);
-      window.removeEventListener("load", handleLoad);
     };
   }, []);
 
@@ -223,3 +211,4 @@ export function SiteLoader() {
     </AnimatePresence>
   );
 }
+
